@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Vinylizer.Models;
 
 namespace Vinylizer.Controllers
 {
@@ -13,18 +15,48 @@ namespace Vinylizer.Controllers
             return View();
         }
 
-        public ActionResult About()
+        [HttpPost]
+        public void UploadAudioFile(HttpPostedFileBase file)
         {
-            ViewBag.Message = "Your application description page.";
+            if (file.ContentLength > 0)
+            {
+                var fileName = Path.GetFileName(file.FileName).Replace(" ", string.Empty);
+                DirectoryInfo dir = Directory.CreateDirectory("~/App_Data/Uploads" + fileName);
+                var path = Path.Combine(dir.FullName, fileName);
+                file.SaveAs(path);
 
-            return View();
+                var VinylizerFileName = new HttpCookie("VinylizerFileName", fileName);
+                VinylizerFileName.Expires = DateTime.Now.AddYears(1);
+                HttpContext.Response.Cookies.Add(VinylizerFileName);
+
+            }
         }
 
-        public ActionResult Contact()
+        public ActionResult GetAudioFileForPlay(string fileName)
         {
-            ViewBag.Message = "Your contact page.";
+            byte[] fileBytes = System.IO.File.ReadAllBytes(string.Format("~/App_Data/{0}/{1}", fileName, fileName));
+            MemoryStream ms = new MemoryStream(fileBytes);
 
-            return View();
+            return File(ms, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+        }
+
+        public ActionResult GetFilterForPlay(int volumeLvl, string fileName)
+        {
+            string filerName = Converter.ChangeVolumeForTest(volumeLvl, fileName);
+            byte[] fileBytes = System.IO.File.ReadAllBytes(string.Format("~/App_Data/{0}/{1}", fileName, filerName));
+            MemoryStream  ms = new MemoryStream(fileBytes);
+
+            return File(ms, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+        }
+
+        public ActionResult GetAudioFileForDownload(string fileName, int volumeLvl)
+        {
+            Converter.ChangeVolume(volumeLvl, fileName);
+            Converter.Merge(fileName);
+            string mixName = string.Format("Converted{0}", fileName);
+            byte[] fileBytes = System.IO.File.ReadAllBytes(string.Format("~/App_Data/{0}/{1}", fileName, mixName));
+
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, mixName);
         }
     }
 }
