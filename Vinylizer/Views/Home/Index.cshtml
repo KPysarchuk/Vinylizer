@@ -1,5 +1,21 @@
-﻿@using (Html.BeginForm("UploadAudioFile", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+﻿@{
+    string file_name = "";
+    if (Request.Cookies["VinylizerFileName"] != null )
+    {
+        file_name = (Request.Cookies["VinylizerFileName"]).Value;
+    }
+}
+
+@using (Html.BeginForm("UploadAudioFile", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <input type="file" name="file" />
     <input type="submit" name="Submit" id="Submit" value="Upload" />
 }
+
+<audio controls id="audio">
+    <source id="mp3_src" src="/Home/GetAudioFileForPlay?fileName=@file_name" type="audio/mp3">
+    Тег audio не поддерживается вашим браузером.
+    <a href="audio/music.mp3">Скачайте музыку</a>.
+</audio>
+
+<input id="filterVolume" type="range" min="0" max="10" step="1" value="5"> 
