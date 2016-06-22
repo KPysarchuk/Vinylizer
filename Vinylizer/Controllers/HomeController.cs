@@ -21,7 +21,7 @@ namespace Vinylizer.Controllers
             if (file.ContentLength > 0)
             {
                 var fileName = Path.GetFileName(file.FileName).Replace(" ", string.Empty);
-                DirectoryInfo dir = Directory.CreateDirectory("~/App_Data/Uploads" + fileName);
+                DirectoryInfo dir = Directory.CreateDirectory("D:/Vinylizer/" + fileName);
                 var path = Path.Combine(dir.FullName, fileName);
                 file.SaveAs(path);
 
@@ -34,7 +34,7 @@ namespace Vinylizer.Controllers
 
         public ActionResult GetAudioFileForPlay(string fileName)
         {
-            byte[] fileBytes = System.IO.File.ReadAllBytes(string.Format("~/App_Data/{0}/{1}", fileName, fileName));
+            byte[] fileBytes = System.IO.File.ReadAllBytes(string.Format("D:/Vinylizer/{0}/{1}", fileName, fileName));
             MemoryStream ms = new MemoryStream(fileBytes);
 
             return File(ms, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
@@ -43,7 +43,7 @@ namespace Vinylizer.Controllers
         public ActionResult GetFilterForPlay(int volumeLvl, string fileName)
         {
             string filerName = Converter.ChangeVolumeForTest(volumeLvl, fileName);
-            byte[] fileBytes = System.IO.File.ReadAllBytes(string.Format("~/App_Data/{0}/{1}", fileName, filerName));
+            byte[] fileBytes = System.IO.File.ReadAllBytes(string.Format("D:/Vinylizer/{0}/Test/{1}", fileName, filerName));
             MemoryStream  ms = new MemoryStream(fileBytes);
 
             return File(ms, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
@@ -54,7 +54,7 @@ namespace Vinylizer.Controllers
             Converter.ChangeVolume(volumeLvl, fileName);
             Converter.Merge(fileName);
             string mixName = string.Format("Converted{0}", fileName);
-            byte[] fileBytes = System.IO.File.ReadAllBytes(string.Format("~/App_Data/{0}/{1}", fileName, mixName));
+            byte[] fileBytes = System.IO.File.ReadAllBytes(string.Format("D:/Vinylizer/{0}/{1}", fileName, mixName));
 
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, mixName);
         }

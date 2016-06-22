@@ -10,10 +10,10 @@ namespace Vinylizer.Models
         public static void Merge(string fileName)
         {
             Random rnd = new Random();
-            string input = string.Format("Uploads/{0}/{1}", fileName, fileName);
-            string filter = string.Format("Uploads/{0}/filter.mp3", fileName); ;
+            string input = string.Format("Vinylizer/{0}/{1}", fileName, fileName);
+            string filter = string.Format("Vinylizer/{0}/filter.mp3", fileName); ;
             string UfileName = string.Format("Converted{0}", fileName);
-            string output = string.Format("Uploads/{0}/", UfileName);
+            string output = string.Format("Vinylizer/{0}/", UfileName);
             string command = string.Format("-i {0} -i {1} -filter_complex amix=inputs=2:duration=first:dropout_transition=2 {2}", input, filter, output);
             var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
             ffMpeg.Invoke(command);
@@ -23,7 +23,7 @@ namespace Vinylizer.Models
         {
             Random rnd = new Random();
             string filter = "filter.mp3";
-            string output = string.Format("Uploads/{0}/filter.mp3", fileName);
+            string output = string.Format("Vinylizer/{0}/filter.mp3", fileName);
             string command = string.Format(@"-i {0} -af ""volume={1}"" {2}", filter, volumePart, output).Replace("\"", string.Empty);
             var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
             ffMpeg.Invoke(command);
@@ -34,7 +34,7 @@ namespace Vinylizer.Models
             Random rnd = new Random();
             string filter = "filter.mp3";
             string outputName = string.Format("filter{0}.mp3", rnd.Next(1000000).ToString());
-            string output = string.Format("audio/{0}", outputName);
+            string output = string.Format("Vinylizer/{0}/Test", outputName);
             string command = string.Format(@"-i {0} -af ""volume={1}"" {2}", filter, volumePart, output).Replace("\"", string.Empty);
             var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
             ffMpeg.Invoke(command);
