@@ -22,6 +22,7 @@ namespace Vinylizer.Controllers
             {
                 var fileName = Path.GetFileName(file.FileName).Replace(" ", string.Empty);
                 DirectoryInfo dir = Directory.CreateDirectory("D:/Vinylizer/" + fileName);
+                DirectoryInfo dirr = Directory.CreateDirectory("D:/Vinylizer/" + fileName + "/Test");
                 var path = Path.Combine(dir.FullName, fileName);
                 file.SaveAs(path);
 

@@ -32,9 +32,9 @@ namespace Vinylizer.Models
         public static string ChangeVolumeForTest(int volumePart, string fileName)
         {
             Random rnd = new Random();
-            string filter = "filter.mp3";
+            string filter = "D:/filter.mp3";
             string outputName = string.Format("filter{0}.mp3", rnd.Next(1000000).ToString());
-            string output = string.Format("Vinylizer/{0}/Test", outputName);
+            string output = string.Format("D:/Vinylizer/{0}/Test/{1}", fileName, outputName);
             string command = string.Format(@"-i {0} -af ""volume={1}"" {2}", filter, volumePart, output).Replace("\"", string.Empty);
             var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
             ffMpeg.Invoke(command);
