@@ -1,21 +1,64 @@
 ﻿@{
     string file_name = "";
-    if (Request.Cookies["VinylizerFileName"] != null )
+    if (Request.Cookies["VinylizerFileName"] != null)
     {
         file_name = (Request.Cookies["VinylizerFileName"]).Value;
     }
 }
 
-@using (Html.BeginForm("UploadAudioFile", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <input type="file" name="file" />
-    <input type="submit" name="Submit" id="Submit" value="Upload" />
-}
+@*@using (Html.BeginForm("UploadAudioFile", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="file" name="file" class="form-control"/>
+        <input type="submit" class="btn btn-default" name="Submit" id="Submit" value="Upload" />
+    }*@
 
-<audio controls id="audio">
-    <source id="mp3_src" src="/Home/GetAudioFileForPlay?fileName=@file_name" type="audio/mp3">
-    Тег audio не поддерживается вашим браузером.
-    <a href="audio/music.mp3">Скачайте музыку</a>.
-</audio>
+<div class="row">
+    <div>
 
-<input id="filterVolume" type="range" min="0" max="10" step="1" value="5"> 
+    </div>
+    <div class="col-md-12">
+        <audio controls id="audio">
+            <source id="mp3_src" src="/Home/GetAudioFileForPlay?fileName=@file_name" type="audio/mp3">
+        </audio>
+
+        <audio loop id="filter" style="display:none">
+            <source id="mp3_filter_src" src="/Home/GetAudioFileForPlay?fileName=@file_name" type="audio/mp3">
+        </audio>
+
+        @*<input id="filterVolume" type="range" min="0" max="10" step="1" value="5">*@
+        @*<input type="button" class="btn btn-info" name="Download" id="Download" value="Download" onClick="download('@file_name')" />*@
+    </div>
+    <div class="col-md-12">
+        <input type="button" class="btn btn-info" name="Download" id="Download" value="Download" onClick="download('@file_name')" />
+    </div>
+</div>
+<div class="row vi">
+    <div class="col-md-12">
+        <input id="ef1" class="effect_slider" type="text"/>
+        <input id="ef2" class="effect_slider" type="text"/>
+        <input id="ef3" class="effect_slider" type="text"/>
+        <input id="ef4" class="effect_slider" type="text"/>
+        <input id="ef5" class="effect_slider" type="text"/>
+        <input id="ef6" class="effect_slider" type="text"/>
+    </div>
+    <div style="display:none">
+        <audio loop id="filter1" data-player="ef1">
+            <source id="mp3_filter1_src" src="/Home/GetFilterForPlay?fileName=@file_name&id=1" type="audio/mp3">
+        </audio>
+        <audio loop id="filter2" data-player="ef2">
+            <source id="mp3_filter2_src" src="/Home/GetFilterForPlay?fileName=@file_name&id=2" type="audio/mp3">
+        </audio>
+        <audio loop id="filter3" data-player="ef3">
+            <source id="mp3_filter3_src" src="/Home/GetFilterForPlay?fileName=@file_name&id=3" type="audio/mp3">
+        </audio>
+        <audio loop id="filter4" data-player="ef4">
+            <source id="mp3_filter4_src" src="/Home/GetFilterForPlay?fileName=@file_name&id=4" type="audio/mp3">
+        </audio>
+        <audio loop id="filter5" data-player="ef5">
+            <source id="mp3_filter5_src" src="/Home/GetFilterForPlay?fileName=@file_name&id=5" type="audio/mp3">
+        </audio>
+        <audio loop id="filter6" data-player="ef6">
+            <source id="mp3_filter6_src" src="/Home/GetFilterForPlay?fileName=@file_name&id=6" type="audio/mp3">
+        </audio>
+    </div>
+</div>

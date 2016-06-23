@@ -1,12 +1,13 @@
 ﻿$(document).ready(function () {
-    console.log(1);
     var trackName = getCookie("VinylizerFileName");
+
+   
 
     $("#filterVolume").change(function () {
         console.log(trackName, this.value);
 
-        var audio = $("#audio");
-        $("#mp3_src").attr("src", "/Home/GetFilterForPlay?volumeLvl=" + this.value + "&fileName=" + trackName);
+        var audio = $("#filter");
+        $("#mp3_filter_src").attr("src", "/Home/GetFilterForPlay?volumeLvl=" + this.value + "&fileName=" + trackName);
         audio[0].pause();
         audio[0].load();//suspends and restores all audio element
 
@@ -14,9 +15,40 @@
         audio[0].oncanplaythrough = audio[0].play();
     });
 
+    $("form").submit(function () {
+
+        var formData = new FormData($(this)[0]);
+
+        $.post($(this).attr("action"), formData, function (data) {
+            alert(data);
+        });
+
+        return false;
+    });
+
+    $("#audio")[0].addEventListener("ended", function () {
+        console.log("ended");
+        $("#filter")[0].pause();
+        $("#filter")[0].currentTime = 0;
+    });
+
+    $("#audio")[0].addEventListener("onplay", function () {
+        console.log("ended");
+        $("#filter")[0].play();
+    });
+
+    $("#Download").click()
+    
+   
 });
 
 
+var download = function (fileName) {
+    $.get("/Home/GetAudioFileForDownload", {
+        fileName: fileName,
+        volumeLvl: $("#filterVolume").val()
+    })
+}
 function getCookie(name) {
     var matches = document.cookie.match(new RegExp(
       "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
