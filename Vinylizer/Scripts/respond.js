@@ -44,7 +44,7 @@ window.matchMedia = window.matchMedia || (function(doc, undefined){
 
 
 
-/*! Respond.js v1.2.0: min/max-width media query polyfill. (c) Scott Jehl. MIT/GPLv2 Lic. j.mp/respondjs  */
+/*! Respond.js v1.1.0: min/max-width media query polyfill. (c) Scott Jehl. MIT/GPLv2 Lic. j.mp/respondjs  */
 (function( win ){
 	//exposed namespace
 	win.respond		= {};
@@ -125,7 +125,7 @@ window.matchMedia = window.matchMedia || (function(doc, undefined){
 				//try to get CSS path
 				href		= href.substring( 0, href.lastIndexOf( "/" )),
 				repUrls		= function( css ){
-					return css.replace( /(url\()['"]?([^\/\)'"][^:\)'"]+)['"]?(\))/g, "$1" + href + "$2$3" );
+					return css.replace( /(url\()['"]?([^\/\)'"][^:\)'"]+)['"]?(\))/g, "$1" + href + "$1$3" );
 				},
 				useMedia	= !ql && media,
 				//vars used in loop
@@ -155,7 +155,7 @@ window.matchMedia = window.matchMedia || (function(doc, undefined){
 				//parse for styles
 				else{
 					fullq	= qs[ i ].match( /@media *([^\{]+)\{([\S\s]+?)$/ ) && RegExp.$1;
-					rules.push( RegExp.$2 && repUrls( RegExp.$2 ) );
+					rules.push( RegExp.$1 && repUrls( RegExp.$1 ) );
 				}
 				
 				eachq	= fullq.split( "," );
@@ -164,11 +164,11 @@ window.matchMedia = window.matchMedia || (function(doc, undefined){
 				for( ; j < eql; j++ ){
 					thisq	= eachq[ j ];
 					mediastyles.push( { 
-						media	: thisq.split( "(" )[ 0 ].match( /(only\s+)?([a-zA-Z]+)\s?/ ) && RegExp.$2 || "all",
+						media	: thisq.split( "(" )[ 0 ].match( /(only\s+)?([a-zA-Z]+)\s?/ ) && RegExp.$1 || "all",
 						rules	: rules.length - 1,
 						hasquery: thisq.indexOf("(") > -1,
-						minw	: thisq.match( /\(min\-width:[\s]*([\s]*[0-9\.]+)(px|em)[\s]*\)/ ) && parseFloat( RegExp.$1 ) + ( RegExp.$2 || "" ), 
-						maxw	: thisq.match( /\(max\-width:[\s]*([\s]*[0-9\.]+)(px|em)[\s]*\)/ ) && parseFloat( RegExp.$1 ) + ( RegExp.$2 || "" )
+						minw	: thisq.match( /\(min\-width:[\s]*([\s]*[0-9\.]+)(px|em)[\s]*\)/ ) && parseFloat( RegExp.$1 ) + ( RegExp.$1 || "" ), 
+						maxw	: thisq.match( /\(max\-width:[\s]*([\s]*[0-9\.]+)(px|em)[\s]*\)/ ) && parseFloat( RegExp.$1 ) + ( RegExp.$1 || "" )
 					} );
 				}	
 			}

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,47 +16,45 @@ namespace Vinylizer.Controllers
             return View();
         }
 
-        [HttpPost]
-        public void UploadAudioFile(HttpPostedFileBase file)
-        {
-            if (file.ContentLength > 0)
-            {
-                var fileName = Path.GetFileName(file.FileName).Replace(" ", string.Empty);
-                DirectoryInfo dir = Directory.CreateDirectory("D:/Vinylizer/" + fileName);
-                DirectoryInfo dirr = Directory.CreateDirectory("D:/Vinylizer/" + fileName + "/Test");
-                var path = Path.Combine(dir.FullName, fileName);
-                file.SaveAs(path);
-
-                var VinylizerFileName = new HttpCookie("VinylizerFileName", fileName);
-                VinylizerFileName.Expires = DateTime.Now.AddYears(1);
-                HttpContext.Response.Cookies.Add(VinylizerFileName);
-
-            }
-        }
-
         public ActionResult GetAudioFileForPlay(string fileName)
         {
-            byte[] fileBytes = System.IO.File.ReadAllBytes(string.Format("D:/Vinylizer/{0}/{1}", fileName, fileName));
+            byte[] fileBytes = System.IO.File.ReadAllBytes(string.Format("~App_Data/{0}", fileName));
             MemoryStream ms = new MemoryStream(fileBytes);
 
             return File(ms, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
 
-        public ActionResult GetFilterForPlay(int volumeLvl, string fileName)
+        public ActionResult GetFilterForPlay(int filterId)
         {
-            string filerName = Converter.ChangeVolumeForTest(volumeLvl, fileName);
-            byte[] fileBytes = System.IO.File.ReadAllBytes(string.Format("D:/Vinylizer/{0}/Test/{1}", fileName, filerName));
+            string fileName = filterId.ToString() + ".mp3"; 
+            byte[] fileBytes = System.IO.File.ReadAllBytes("~App_Data/" + fileName);
             MemoryStream  ms = new MemoryStream(fileBytes);
-
+            
             return File(ms, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
 
-        public ActionResult GetAudioFileForDownload(string fileName, int volumeLvl)
+        public ActionResult GetAudioFileForDownload(string fileName, FilterModel[] filters)
         {
-            Converter.ChangeVolume(volumeLvl, fileName);
-            Converter.Merge(fileName);
+            int usedFilters = 1;
+            Mp3FileReader reader = new Mp3FileReader("~App_Data/" + fileName);
+            TimeSpan duration = reader.TotalTime;
+            string mergeString = "-i " + fileName;
+
+            foreach (var filter in filters)
+            {
+                if (filter.Volume != 0)
+                {
+                    string filterName = Converter.Loop(filter.Id, duration);
+                    string finishedName = Converter.ChangeVolume(filter.Volume, fileName);
+                    mergeString = mergeString + " -i " + finishedName;
+                    usedFilters++;
+                }
+            }
+
+            Converter.Merge(mergeString, fileName, usedFilters);
+
             string mixName = string.Format("Converted{0}", fileName);
-            byte[] fileBytes = System.IO.File.ReadAllBytes(string.Format("D:/Vinylizer/{0}/{1}", fileName, mixName));
+            byte[] fileBytes = System.IO.File.ReadAllBytes(string.Format("~/App_Data/{0}", mixName));
 
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, mixName);
         }

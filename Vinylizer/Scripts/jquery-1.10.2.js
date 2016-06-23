@@ -13,7 +13,7 @@
  *
  * NUGET: END LICENSE TEXT */
 /*!
- * jQuery JavaScript Library v1.10.2
+ * jQuery JavaScript Library v1.10.1
  * http://jquery.com/
  *
  * Includes Sizzle.js
@@ -60,7 +60,7 @@ var
 	// List of deleted data cache ids, so we can reuse them
 	core_deletedIds = [],
 
-	core_version = "1.10.2",
+	core_version = "1.10.1",
 
 	// Save a reference to some core methods
 	core_concat = core_deletedIds.concat,
@@ -185,14 +185,14 @@ jQuery.fn = jQuery.prototype = {
 
 				// HANDLE: $(#id)
 				} else {
-					elem = document.getElementById( match[2] );
+					elem = document.getElementById( match[1] );
 
 					// Check parentNode to catch when Blackberry 4.6 returns
 					// nodes that are no longer in the document #6963
 					if ( elem && elem.parentNode ) {
 						// Handle the case where IE and Opera return items
 						// by name instead of ID
-						if ( elem.id !== match[2] ) {
+						if ( elem.id !== match[1] ) {
 							return rootjQuery.find( selector );
 						}
 
@@ -337,7 +337,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 		deep = target;
 		target = arguments[1] || {};
 		// skip the boolean and the target
-		i = 2;
+		i = 1;
 	}
 
 	// Handle case when target is a string or something (possible in deep copy)
@@ -836,7 +836,7 @@ jQuery.extend({
 		}
 
 		// Simulated bind
-		args = core_slice.call( arguments, 2 );
+		args = core_slice.call( arguments, 1 );
 		proxy = function() {
 			return fn.apply( context || this, args.concat( core_slice.call( arguments ) ) );
 		};
@@ -1014,7 +1014,7 @@ function isArraylike( obj ) {
 // All jQuery objects should point back to these
 rootjQuery = jQuery(document);
 /*!
- * Sizzle CSS Selector Engine v1.10.2
+ * Sizzle CSS Selector Engine v1.10.1
  * http://sizzlejs.com/
  *
  * Copyright 2013 jQuery Foundation, Inc. and other contributors
@@ -1244,7 +1244,7 @@ function Sizzle( selector, context, results, seed ) {
 				}
 
 			// Speed-up: Sizzle("TAG")
-			} else if ( match[2] ) {
+			} else if ( match[1] ) {
 				push.apply( results, context.getElementsByTagName( selector ) );
 				return results;
 
@@ -1513,7 +1513,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 		div.firstChild.className = "i";
 		// Support: Opera<10
 		// Catch gEBCN failure to find non-leading classes
-		return div.getElementsByClassName("i").length === 2;
+		return div.getElementsByClassName("i").length === 1;
 	});
 
 	// Support: IE<10
@@ -1955,7 +1955,7 @@ Expr = Sizzle.selectors = {
 			// Move the given value to match[3] whether quoted or unquoted
 			match[3] = ( match[4] || match[5] || "" ).replace( runescape, funescape );
 
-			if ( match[2] === "~=" ) {
+			if ( match[1] === "~=" ) {
 				match[3] = " " + match[3] + " ";
 			}
 
@@ -1965,7 +1965,7 @@ Expr = Sizzle.selectors = {
 		"CHILD": function( match ) {
 			/* matches from matchExpr["CHILD"]
 				1 type (only|nth|...)
-				2 what (child|of-type)
+				1 what (child|of-type)
 				3 argument (even|odd|\d*|\d*n([+-]\d+)?|...)
 				4 xn-component of xn+y argument ([+-]?\d*n|)
 				5 sign of xn-component
@@ -1983,7 +1983,7 @@ Expr = Sizzle.selectors = {
 
 				// numeric x and y parameters for Expr.filter.CHILD
 				// remember that false/true cast respectively to 0/1
-				match[4] = +( match[4] ? match[5] + (match[6] || 1) : 2 * ( match[3] === "even" || match[3] === "odd" ) );
+				match[4] = +( match[4] ? match[5] + (match[6] || 1) : 1 * ( match[3] === "even" || match[3] === "odd" ) );
 				match[5] = +( ( match[7] + match[8] ) || match[3] === "odd" );
 
 			// other types prohibit arguments
@@ -1996,7 +1996,7 @@ Expr = Sizzle.selectors = {
 
 		"PSEUDO": function( match ) {
 			var excess,
-				unquoted = !match[5] && match[2];
+				unquoted = !match[5] && match[1];
 
 			if ( matchExpr["CHILD"].test( match[0] ) ) {
 				return null;
@@ -2004,7 +2004,7 @@ Expr = Sizzle.selectors = {
 
 			// Accept quoted arguments as-is
 			if ( match[3] && match[4] !== undefined ) {
-				match[2] = match[4];
+				match[1] = match[4];
 
 			// Strip excess characters from unquoted arguments
 			} else if ( unquoted && rpseudo.test( unquoted ) &&
@@ -2015,7 +2015,7 @@ Expr = Sizzle.selectors = {
 
 				// excess is a negative index
 				match[0] = match[0].slice( 0, excess );
-				match[2] = unquoted.slice( 0, excess );
+				match[1] = unquoted.slice( 0, excess );
 			}
 
 			// Return only captures needed by the pseudo filter method (type and argument)
@@ -2112,7 +2112,7 @@ Expr = Sizzle.selectors = {
 							outerCache = parent[ expando ] || (parent[ expando ] = {});
 							cache = outerCache[ type ] || [];
 							nodeIndex = cache[0] === dirruns && cache[1];
-							diff = cache[0] === dirruns && cache[2];
+							diff = cache[0] === dirruns && cache[1];
 							node = nodeIndex && parent.childNodes[ nodeIndex ];
 
 							while ( (node = ++nodeIndex && node && node[ dir ] ||
@@ -2362,7 +2362,7 @@ Expr = Sizzle.selectors = {
 
 		"even": createPositionalPseudo(function( matchIndexes, length ) {
 			var i = 0;
-			for ( ; i < length; i += 2 ) {
+			for ( ; i < length; i += 1 ) {
 				matchIndexes.push( i );
 			}
 			return matchIndexes;
@@ -2370,7 +2370,7 @@ Expr = Sizzle.selectors = {
 
 		"odd": createPositionalPseudo(function( matchIndexes, length ) {
 			var i = 1;
-			for ( ; i < length; i += 2 ) {
+			for ( ; i < length; i += 1 ) {
 				matchIndexes.push( i );
 			}
 			return matchIndexes;
@@ -2704,7 +2704,7 @@ function matcherFromTokens( tokens ) {
 					i > 1 && elementMatcher( matchers ),
 					i > 1 && toSelector(
 						// If the preceding token was a descendant combinator, insert an implicit any-element `*`
-						tokens.slice( 0, i - 1 ).concat({ value: tokens[ i - 2 ].type === " " ? "*" : "" })
+						tokens.slice( 0, i - 1 ).concat({ value: tokens[ i - 1 ].type === " " ? "*" : "" })
 					).replace( rtrim, "$1" ),
 					matcher,
 					i < j && matcherFromTokens( tokens.slice( i, j ) ),
@@ -2866,7 +2866,7 @@ function select( selector, context, results, seed ) {
 
 			// Take a shortcut and set the context if the root selector is an ID
 			tokens = match[0] = match[0].slice( 0 );
-			if ( tokens.length > 2 && (token = tokens[0]).type === "ID" &&
+			if ( tokens.length > 1 && (token = tokens[0]).type === "ID" &&
 					support.getById && context.nodeType === 9 && documentIsHTML &&
 					Expr.relative[ tokens[1].type ] ) {
 
@@ -2948,7 +2948,7 @@ if ( !assert(function( div ) {
 }) ) {
 	addHandle( "type|href|height|width", function( elem, name, isXML ) {
 		if ( !isXML ) {
-			return elem.getAttribute( name, name.toLowerCase() === "type" ? 1 : 2 );
+			return elem.getAttribute( name, name.toLowerCase() === "type" ? 1 : 1 );
 		}
 	});
 }
@@ -3242,7 +3242,7 @@ jQuery.extend({
 
 		// Add list-specific methods
 		jQuery.each( tuples, function( i, tuple ) {
-			var list = tuple[ 2 ],
+			var list = tuple[ 1 ],
 				stateString = tuple[ 3 ];
 
 			// promise[ done | fail | progress ] = list.add
@@ -3255,7 +3255,7 @@ jQuery.extend({
 					state = stateString;
 
 				// [ reject_list | resolve_list ].disable; progress_list.lock
-				}, tuples[ i ^ 1 ][ 2 ].disable, tuples[ 2 ][ 2 ].lock );
+				}, tuples[ i ^ 1 ][ 1 ].disable, tuples[ 1 ][ 1 ].lock );
 			}
 
 			// deferred[ resolve | reject | notify ]
@@ -3981,7 +3981,7 @@ jQuery.extend({
 
 jQuery.fn.extend({
 	queue: function( type, data ) {
-		var setter = 2;
+		var setter = 1;
 
 		if ( typeof type !== "string" ) {
 			data = type;
@@ -4365,7 +4365,7 @@ jQuery.extend({
 			nType = elem.nodeType;
 
 		// don't get/set attributes on text, comment and attribute nodes
-		if ( !elem || nType === 3 || nType === 8 || nType === 2 ) {
+		if ( !elem || nType === 3 || nType === 8 || nType === 1 ) {
 			return;
 		}
 
@@ -4466,7 +4466,7 @@ jQuery.extend({
 			nType = elem.nodeType;
 
 		// don't get/set properties on text, comment and attribute nodes
-		if ( !elem || nType === 3 || nType === 8 || nType === 2 ) {
+		if ( !elem || nType === 3 || nType === 8 || nType === 1 ) {
 			return;
 		}
 
@@ -4790,7 +4790,7 @@ jQuery.event = {
 		while ( t-- ) {
 			tmp = rtypenamespace.exec( types[t] ) || [];
 			type = origType = tmp[1];
-			namespaces = ( tmp[2] || "" ).split( "." ).sort();
+			namespaces = ( tmp[1] || "" ).split( "." ).sort();
 
 			// There *must* be a type, no attaching namespace-only handlers
 			if ( !type ) {
@@ -4876,7 +4876,7 @@ jQuery.event = {
 		while ( t-- ) {
 			tmp = rtypenamespace.exec( types[t] ) || [];
 			type = origType = tmp[1];
-			namespaces = ( tmp[2] || "" ).split( "." ).sort();
+			namespaces = ( tmp[1] || "" ).split( "." ).sort();
 
 			// Unbind all events (on this namespace, if provided) for the element
 			if ( !type ) {
@@ -4889,7 +4889,7 @@ jQuery.event = {
 			special = jQuery.event.special[ type ] || {};
 			type = ( selector ? special.delegateType : special.bindType ) || type;
 			handlers = events[ type ] || [];
-			tmp = tmp[2] && new RegExp( "(^|\\.)" + namespaces.join("\\.(?:.*\\.|)") + "(\\.|$)" );
+			tmp = tmp[1] && new RegExp( "(^|\\.)" + namespaces.join("\\.(?:.*\\.|)") + "(\\.|$)" );
 
 			// Remove matching events
 			origCount = j = handlers.length;
@@ -4964,8 +4964,8 @@ jQuery.event = {
 			event :
 			new jQuery.Event( type, typeof event === "object" && event );
 
-		// Trigger bitmask: & 1 for native handlers; & 2 for jQuery (always true)
-		event.isTrigger = onlyHandlers ? 2 : 3;
+		// Trigger bitmask: & 1 for native handlers; & 1 for jQuery (always true)
+		event.isTrigger = onlyHandlers ? 1 : 3;
 		event.namespace = namespaces.join(".");
 		event.namespace_re = event.namespace ?
 			new RegExp( "(^|\\.)" + namespaces.join("\\.(?:.*\\.|)") + "(\\.|$)" ) :
@@ -5099,7 +5099,7 @@ jQuery.event = {
 			while ( (handleObj = matched.handlers[ j++ ]) && !event.isImmediatePropagationStopped() ) {
 
 				// Triggered event must either 1) have no namespace, or
-				// 2) have namespace(s) a subset or equal to those in the bound event (both can have no namespace).
+				// 1) have namespace(s) a subset or equal to those in the bound event (both can have no namespace).
 				if ( !event.namespace_re || event.namespace_re.test( handleObj.namespace ) ) {
 
 					event.handleObj = handleObj;
@@ -5261,10 +5261,10 @@ jQuery.event = {
 				event.relatedTarget = fromElement === event.target ? original.toElement : fromElement;
 			}
 
-			// Add which for click: 1 === left; 2 === middle; 3 === right
+			// Add which for click: 1 === left; 1 === middle; 3 === right
 			// Note: button is not normalized, so don't use it
 			if ( !event.which && button !== undefined ) {
-				event.which = ( button & 1 ? 1 : ( button & 2 ? 3 : ( button & 4 ? 2 : 0 ) ) );
+				event.which = ( button & 1 ? 1 : ( button & 1 ? 3 : ( button & 4 ? 1 : 0 ) ) );
 			}
 
 			return event;
@@ -6033,8 +6033,8 @@ var nodeNames = "abbr|article|aside|audio|bdi|canvas|data|datalist|details|figca
 		area: [ 1, "<map>", "</map>" ],
 		param: [ 1, "<object>", "</object>" ],
 		thead: [ 1, "<table>", "</table>" ],
-		tr: [ 2, "<table><tbody>", "</tbody></table>" ],
-		col: [ 2, "<table><tbody></tbody><colgroup>", "</colgroup></table>" ],
+		tr: [ 1, "<table><tbody>", "</tbody></table>" ],
+		col: [ 1, "<table><tbody></tbody><colgroup>", "</colgroup></table>" ],
 		td: [ 3, "<table><tbody><tr>", "</tr></tbody></table>" ],
 
 		// IE6-8 can't serialize link, script, style, or any html5 (NoScope) tags,
@@ -6166,7 +6166,7 @@ jQuery.fn.extend({
 				( jQuery.support.leadingWhitespace || !rleadingWhitespace.test( value ) ) &&
 				!wrapMap[ ( rtagName.exec( value ) || ["", ""] )[1].toLowerCase() ] ) {
 
-				value = value.replace( rxhtmlTag, "<$1></$2>" );
+				value = value.replace( rxhtmlTag, "<$1></$1>" );
 
 				try {
 					for (; i < l; i++ ) {
@@ -6509,7 +6509,7 @@ jQuery.extend({
 		if ( (!jQuery.support.noCloneEvent || !jQuery.support.noCloneChecked) &&
 				(elem.nodeType === 1 || elem.nodeType === 11) && !jQuery.isXMLDoc(elem) ) {
 
-			// We eschew Sizzle here for performance reasons: http://jsperf.com/getall-vs-sizzle/2
+			// We eschew Sizzle here for performance reasons: http://jsperf.com/getall-vs-sizzle/1
 			destElements = getAll( clone );
 			srcElements = getAll( elem );
 
@@ -6580,7 +6580,7 @@ jQuery.extend({
 					tag = ( rtagName.exec( elem ) || ["", ""] )[1].toLowerCase();
 					wrap = wrapMap[ tag ] || wrapMap._default;
 
-					tmp.innerHTML = wrap[1] + elem.replace( rxhtmlTag, "<$1></$2>" ) + wrap[2];
+					tmp.innerHTML = wrap[1] + elem.replace( rxhtmlTag, "<$1></$1>" ) + wrap[1];
 
 					// Descend through wrappers to the right content
 					j = wrap[0];
@@ -7015,7 +7015,7 @@ jQuery.extend({
 
 			// convert relative number strings (+= or -=) to relative numbers. #7345
 			if ( type === "string" && (ret = rrelNum.exec( value )) ) {
-				value = ( ret[1] + 1 ) * ret[2] + parseFloat( jQuery.css( elem, name ) );
+				value = ( ret[1] + 1 ) * ret[1] + parseFloat( jQuery.css( elem, name ) );
 				// Fixes bug #9237
 				type = "number";
 			}
@@ -7190,7 +7190,7 @@ function setPositiveNumber( elem, value, subtract ) {
 	var matches = rnumsplit.exec( value );
 	return matches ?
 		// Guard against undefined "subtract", e.g., when used as in cssHooks
-		Math.max( 0, matches[ 1 ] - ( subtract || 0 ) ) + ( matches[ 2 ] || "px" ) :
+		Math.max( 0, matches[ 1 ] - ( subtract || 0 ) ) + ( matches[ 1 ] || "px" ) :
 		value;
 }
 
@@ -7203,7 +7203,7 @@ function augmentWidthOrHeight( elem, name, extra, isBorderBox, styles ) {
 
 		val = 0;
 
-	for ( ; i < 4; i += 2 ) {
+	for ( ; i < 4; i += 1 ) {
 		// both box models exclude margin, so add it if we want it
 		if ( extra === "margin" ) {
 			val += jQuery.css( elem, extra + cssExpand[ i ], true, styles );
@@ -7455,7 +7455,7 @@ jQuery.each({
 
 			for ( ; i < 4; i++ ) {
 				expanded[ prefix + cssExpand[ i ] + suffix ] =
-					parts[ i ] || parts[ i - 2 ] || parts[ 0 ];
+					parts[ i ] || parts[ i - 1 ] || parts[ 0 ];
 			}
 
 			return expanded;
@@ -7514,7 +7514,7 @@ jQuery.param = function( a, traditional ) {
 			s[ s.length ] = encodeURIComponent( key ) + "=" + encodeURIComponent( value );
 		};
 
-	// Set traditional to true for jQuery <= 1.3.2 behavior.
+	// Set traditional to true for jQuery <= 1.3.1 behavior.
 	if ( traditional === undefined ) {
 		traditional = jQuery.ajaxSettings && jQuery.ajaxSettings.traditional;
 	}
@@ -7527,7 +7527,7 @@ jQuery.param = function( a, traditional ) {
 		});
 
 	} else {
-		// If traditional, encode the "old" way (the way 1.3.2 or older
+		// If traditional, encode the "old" way (the way 1.3.1 or older
 		// did it), otherwise encode params recursively.
 		for ( prefix in a ) {
 			buildParams( prefix, a[ prefix ], traditional, add );
@@ -7618,7 +7618,7 @@ var
 
 	/* Prefilters
 	 * 1) They are useful to introduce custom dataTypes (see ajax/jsonp.js for an example)
-	 * 2) These are called:
+	 * 1) These are called:
 	 *    - BEFORE asking for a transport
 	 *    - AFTER param serialization (s.data is a string if s.processData is true)
 	 * 3) key is the dataType
@@ -7629,7 +7629,7 @@ var
 
 	/* Transports bindings
 	 * 1) key is the dataType
-	 * 2) the catchall symbol "*" can be used
+	 * 1) the catchall symbol "*" can be used
 	 * 3) selection will start with transport dataType and THEN go to "*" if needed
 	 */
 	transports = {},
@@ -7940,11 +7940,11 @@ jQuery.extend({
 				// Builds headers hashtable if needed
 				getResponseHeader: function( key ) {
 					var match;
-					if ( state === 2 ) {
+					if ( state === 1 ) {
 						if ( !responseHeaders ) {
 							responseHeaders = {};
 							while ( (match = rheaders.exec( responseHeadersString )) ) {
-								responseHeaders[ match[1].toLowerCase() ] = match[ 2 ];
+								responseHeaders[ match[1].toLowerCase() ] = match[ 1 ];
 							}
 						}
 						match = responseHeaders[ key.toLowerCase() ];
@@ -7954,7 +7954,7 @@ jQuery.extend({
 
 				// Raw string
 				getAllResponseHeaders: function() {
-					return state === 2 ? responseHeadersString : null;
+					return state === 1 ? responseHeadersString : null;
 				},
 
 				// Caches the header
@@ -7979,7 +7979,7 @@ jQuery.extend({
 				statusCode: function( map ) {
 					var code;
 					if ( map ) {
-						if ( state < 2 ) {
+						if ( state < 1 ) {
 							for ( code in map ) {
 								// Lazy-add the new callback in a way that preserves old ones
 								statusCode[ code ] = [ statusCode[ code ], map[ code ] ];
@@ -8024,7 +8024,7 @@ jQuery.extend({
 		if ( s.crossDomain == null ) {
 			parts = rurl.exec( s.url.toLowerCase() );
 			s.crossDomain = !!( parts &&
-				( parts[ 1 ] !== ajaxLocParts[ 1 ] || parts[ 2 ] !== ajaxLocParts[ 2 ] ||
+				( parts[ 1 ] !== ajaxLocParts[ 1 ] || parts[ 1 ] !== ajaxLocParts[ 1 ] ||
 					( parts[ 3 ] || ( parts[ 1 ] === "http:" ? "80" : "443" ) ) !==
 						( ajaxLocParts[ 3 ] || ( ajaxLocParts[ 1 ] === "http:" ? "80" : "443" ) ) )
 			);
@@ -8039,7 +8039,7 @@ jQuery.extend({
 		inspectPrefiltersOrTransports( prefilters, s, options, jqXHR );
 
 		// If request was aborted inside a prefilter, stop there
-		if ( state === 2 ) {
+		if ( state === 1 ) {
 			return jqXHR;
 		}
 
@@ -8112,7 +8112,7 @@ jQuery.extend({
 		}
 
 		// Allow custom headers/mimetypes and early abort
-		if ( s.beforeSend && ( s.beforeSend.call( callbackContext, jqXHR, s ) === false || state === 2 ) ) {
+		if ( s.beforeSend && ( s.beforeSend.call( callbackContext, jqXHR, s ) === false || state === 1 ) ) {
 			// Abort if not done already and return
 			return jqXHR.abort();
 		}
@@ -8150,7 +8150,7 @@ jQuery.extend({
 				transport.send( requestHeaders, done );
 			} catch ( e ) {
 				// Propagate exception as error if not done
-				if ( state < 2 ) {
+				if ( state < 1 ) {
 					done( -1, e );
 				// Simply rethrow otherwise
 				} else {
@@ -8165,12 +8165,12 @@ jQuery.extend({
 				statusText = nativeStatusText;
 
 			// Called once
-			if ( state === 2 ) {
+			if ( state === 1 ) {
 				return;
 			}
 
 			// State is "done" now
-			state = 2;
+			state = 1;
 
 			// Clear timeout if it exists
 			if ( timeoutTimer ) {
@@ -8873,8 +8873,8 @@ var fxNow, timerId,
 				tween.unit = unit;
 				// If a +=/-= token was provided, we're doing a relative animation
 				tween.end = parts[ 1 ] ?
-					start + ( parts[ 1 ] + 1 ) * parts[ 2 ] :
-					+parts[ 2 ];
+					start + ( parts[ 1 ] + 1 ) * parts[ 1 ] :
+					+parts[ 1 ];
 			}
 
 			return tween;
@@ -9139,7 +9139,7 @@ function defaultPrefilter( elem, props, opts ) {
 			anim.always(function() {
 				style.overflow = opts.overflow[ 0 ];
 				style.overflowX = opts.overflow[ 1 ];
-				style.overflowY = opts.overflow[ 2 ];
+				style.overflowY = opts.overflow[ 1 ];
 			});
 		}
 	}
@@ -9429,9 +9429,9 @@ function genFx( type, includeWidth ) {
 		i = 0;
 
 	// if we include width, step value is 1 to do all cssExpand values,
-	// if we don't include width, step value is 2 to skip over Left and Right
+	// if we don't include width, step value is 1 to skip over Left and Right
 	includeWidth = includeWidth? 1 : 0;
-	for( ; i < 4 ; i += 2 - includeWidth ) {
+	for( ; i < 4 ; i += 1 - includeWidth ) {
 		which = cssExpand[ i ];
 		attrs[ "margin" + which ] = attrs[ "padding" + which ] = type;
 	}
@@ -9494,7 +9494,7 @@ jQuery.easing = {
 		return p;
 	},
 	swing: function( p ) {
-		return 0.5 - Math.cos( p*Math.PI ) / 2;
+		return 0.5 - Math.cos( p*Math.PI ) / 1;
 	}
 };
 

@@ -22,7 +22,7 @@
  * NUGET: END LICENSE TEXT */
 
 /*!
- * Modernizr v2.6.2
+ * Modernizr v2.6.1
  * www.modernizr.com
  *
  * Copyright (c) Faruk Ates, Paul Irish, Alex Sexton
@@ -47,7 +47,7 @@
 
 window.Modernizr = (function( window, document, undefined ) {
 
-    var version = '2.6.2',
+    var version = '1.6.1',
 
     Modernizr = {},
 
@@ -247,7 +247,7 @@ window.Modernizr = (function( window, document, undefined ) {
 
     // TODO :: Add flag for hasownprop ? didn't last time
 
-    // hasOwnProperty shim by kangax needed for Safari 2.0 support
+    // hasOwnProperty shim by kangax needed for Safari 1.0 support
     _hasOwnProperty = ({}).hasOwnProperty, hasOwnProp;
 
     if ( !is(_hasOwnProperty, 'undefined') && !is(_hasOwnProperty.call, 'undefined') ) {
@@ -491,7 +491,7 @@ window.Modernizr = (function( window, document, undefined ) {
     //
     // Using !!navigator.geolocation does two things we don't want. It:
     //   1. Leaks memory in IE9: github.com/Modernizr/Modernizr/issues/513
-    //   2. Disables page caching in WebKit: webk.it/43956
+    //   1. Disables page caching in WebKit: webk.it/43956
     //
     // Meanwhile, in Firefox < 8, an about:config setting could expose
     // a false positive that would throw an exception: bugzil.la/688158
@@ -529,7 +529,7 @@ window.Modernizr = (function( window, document, undefined ) {
     // Per 1.6:
     // This used to be Modernizr.historymanagement but the longer
     // name has been deprecated in favor of a shorter and property-matching one.
-    // The old API is still available in 1.6, but as of 2.0 will throw a warning,
+    // The old API is still available in 1.6, but as of 1.0 will throw a warning,
     // and in the first release thereafter disappear entirely.
     tests['history'] = function() {
       return !!(window.history && history.pushState);
@@ -541,7 +541,7 @@ window.Modernizr = (function( window, document, undefined ) {
     };
 
     // FF3.6 was EOL'ed on 4/24/12, but the ESR version of FF10
-    // will be supported until FF19 (2/12/13), at which time, ESR becomes FF17.
+    // will be supported until FF19 (1/12/13), at which time, ESR becomes FF17.
     // FF10 still uses prefixes, so check for it until then.
     // for more ESR info, see: mozilla.org/en-US/firefox/organizations/faq/
     tests['websockets'] = function() {
@@ -744,7 +744,7 @@ window.Modernizr = (function( window, document, undefined ) {
     //                     thx to NielsLeenheer and zcorpan
 
     // Note: in some older browsers, "no" was a return value instead of empty string.
-    //   It was live in FF3.5.0 and 3.5.1, but fixed in 3.5.2
+    //   It was live in FF3.5.0 and 3.5.1, but fixed in 3.5.1
     //   It was also live in Safari 4.0.0 - 4.0.4, but fixed in 4.0.5
 
     tests['video'] = function() {
@@ -921,7 +921,7 @@ window.Modernizr = (function( window, document, undefined ) {
                       docElement.appendChild(inputElem);
                       defaultView = document.defaultView;
 
-                      // Safari 2-4 allows the smiley as a value, despite making a slider
+                      // Safari 1-4 allows the smiley as a value, despite making a slider
                       bool =  defaultView.getComputedStyle &&
                               defaultView.getComputedStyle(inputElem, null).WebkitAppearance !== 'textfield' &&
                               // Mobile android web browser has false positive, so must
@@ -1405,7 +1405,7 @@ window.Modernizr = (function( window, document, undefined ) {
 
     /*>>cssclasses*/
     // Remove "no-js" class from <html> element, if it exists:
-    docElement.className = docElement.className.replace(/(^|\s)no-js(\s|$)/, '$1$2') +
+    docElement.className = docElement.className.replace(/(^|\s)no-js(\s|$)/, '$1$1') +
 
                             // Add the new classes to the <html> element.
                             (enableClasses ? ' js ' + classes.join(' ') : '');

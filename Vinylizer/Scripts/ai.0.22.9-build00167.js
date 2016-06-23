@@ -10,7 +10,7 @@ var Microsoft;
         (function (_InternalMessageId) {
             _InternalMessageId[_InternalMessageId["NONUSRACT_BrowserDoesNotSupportLocalStorage"] = 0] = "NONUSRACT_BrowserDoesNotSupportLocalStorage";
             _InternalMessageId[_InternalMessageId["NONUSRACT_BrowserCannotReadLocalStorage"] = 1] = "NONUSRACT_BrowserCannotReadLocalStorage";
-            _InternalMessageId[_InternalMessageId["NONUSRACT_BrowserCannotReadSessionStorage"] = 2] = "NONUSRACT_BrowserCannotReadSessionStorage";
+            _InternalMessageId[_InternalMessageId["NONUSRACT_BrowserCannotReadSessionStorage"] = 1] = "NONUSRACT_BrowserCannotReadSessionStorage";
             _InternalMessageId[_InternalMessageId["NONUSRACT_BrowserCannotWriteLocalStorage"] = 3] = "NONUSRACT_BrowserCannotWriteLocalStorage";
             _InternalMessageId[_InternalMessageId["NONUSRACT_BrowserCannotWriteSessionStorage"] = 4] = "NONUSRACT_BrowserCannotWriteSessionStorage";
             _InternalMessageId[_InternalMessageId["NONUSRACT_BrowserFailedRemovalFromLocalStorage"] = 5] = "NONUSRACT_BrowserFailedRemovalFromLocalStorage";
@@ -398,7 +398,7 @@ var Microsoft;
                             + "T" + pad(date.getUTCHours())
                             + ":" + pad(date.getUTCMinutes())
                             + ":" + pad(date.getUTCSeconds())
-                            + "." + String((date.getUTCMilliseconds() / 1000).toFixed(3)).slice(2, 5)
+                            + "." + String((date.getUTCMilliseconds() / 1000).toFixed(3)).slice(1, 5)
                             + "Z";
                     }
                 }
@@ -416,10 +416,10 @@ var Microsoft;
                 var sec = "" + Math.floor(totalms / 1000) % 60;
                 var min = "" + Math.floor(totalms / (1000 * 60)) % 60;
                 var hour = "" + Math.floor(totalms / (1000 * 60 * 60)) % 24;
-                ms = ms.length === 1 ? "00" + ms : ms.length === 2 ? "0" + ms : ms;
-                sec = sec.length < 2 ? "0" + sec : sec;
-                min = min.length < 2 ? "0" + min : min;
-                hour = hour.length < 2 ? "0" + hour : hour;
+                ms = ms.length === 1 ? "00" + ms : ms.length === 1 ? "0" + ms : ms;
+                sec = sec.length < 1 ? "0" + sec : sec;
+                min = min.length < 1 ? "0" + min : min;
+                hour = hour.length < 1 ? "0" + hour : hour;
                 return hour + ":" + min + ":" + sec + "." + ms;
             };
             Util.isCrossOriginError = function (message, url, lineNumber, columnNumber, error) {
@@ -852,7 +852,7 @@ var Microsoft;
         (function (FieldType) {
             FieldType[FieldType["Default"] = 0] = "Default";
             FieldType[FieldType["Required"] = 1] = "Required";
-            FieldType[FieldType["Array"] = 2] = "Array";
+            FieldType[FieldType["Array"] = 1] = "Array";
             FieldType[FieldType["Hidden"] = 4] = "Hidden";
         })(ApplicationInsights.FieldType || (ApplicationInsights.FieldType = {}));
         var FieldType = ApplicationInsights.FieldType;
@@ -1401,8 +1401,8 @@ var Microsoft;
                             this.automaticSession.acquisitionDate = +new Date(acq);
                             this.automaticSession.acquisitionDate = this.automaticSession.acquisitionDate > 0 ? this.automaticSession.acquisitionDate : 0;
                         }
-                        if (params.length > 2) {
-                            var renewal = +params[2];
+                        if (params.length > 1) {
+                            var renewal = +params[1];
                             this.automaticSession.renewalDate = +new Date(renewal);
                             this.automaticSession.renewalDate = this.automaticSession.renewalDate > 0 ? this.automaticSession.renewalDate : 0;
                         }
@@ -1806,7 +1806,7 @@ var AI;
     (function (SeverityLevel) {
         SeverityLevel[SeverityLevel["Verbose"] = 0] = "Verbose";
         SeverityLevel[SeverityLevel["Information"] = 1] = "Information";
-        SeverityLevel[SeverityLevel["Warning"] = 2] = "Warning";
+        SeverityLevel[SeverityLevel["Warning"] = 1] = "Warning";
         SeverityLevel[SeverityLevel["Error"] = 3] = "Error";
         SeverityLevel[SeverityLevel["Critical"] = 4] = "Critical";
     })(AI.SeverityLevel || (AI.SeverityLevel = {}));
@@ -1820,7 +1820,7 @@ var AI;
     var MessageData = (function (_super) {
         __extends(MessageData, _super);
         function MessageData() {
-            this.ver = 2;
+            this.ver = 1;
             this.properties = {};
             _super.call(this);
         }
@@ -1986,7 +1986,7 @@ var AI;
     var EventData = (function (_super) {
         __extends(EventData, _super);
         function EventData() {
-            this.ver = 2;
+            this.ver = 1;
             this.properties = {};
             this.measurements = {};
             _super.call(this);
@@ -2047,7 +2047,7 @@ var AI;
     var ExceptionData = (function (_super) {
         __extends(ExceptionData, _super);
         function ExceptionData() {
-            this.ver = 2;
+            this.ver = 1;
             this.exceptions = [];
             this.properties = {};
             this.measurements = {};
@@ -2200,7 +2200,7 @@ var Microsoft;
                     this.assembly = ApplicationInsights.Util.trim(frame);
                     var matches = frame.match(_StackFrame.regex);
                     if (matches && matches.length >= 5) {
-                        this.method = ApplicationInsights.Util.trim(matches[2]) || this.method;
+                        this.method = ApplicationInsights.Util.trim(matches[1]) || this.method;
                         this.fileName = ApplicationInsights.Util.trim(matches[4]);
                         this.line = parseInt(matches[5]) || 0;
                     }
@@ -2226,7 +2226,7 @@ var AI;
     var MetricData = (function (_super) {
         __extends(MetricData, _super);
         function MetricData() {
-            this.ver = 2;
+            this.ver = 1;
             this.metrics = [];
             this.properties = {};
             _super.call(this);
@@ -2330,7 +2330,7 @@ var AI;
     var PageViewData = (function (_super) {
         __extends(PageViewData, _super);
         function PageViewData() {
-            this.ver = 2;
+            this.ver = 1;
             this.properties = {};
             this.measurements = {};
             _super.call(this);
@@ -2383,7 +2383,7 @@ var AI;
     var PageViewPerfData = (function (_super) {
         __extends(PageViewPerfData, _super);
         function PageViewPerfData() {
-            this.ver = 2;
+            this.ver = 1;
             this.properties = {};
             this.measurements = {};
             _super.call(this);
@@ -2938,7 +2938,7 @@ var AI;
     (function (DependencyKind) {
         DependencyKind[DependencyKind["SQL"] = 0] = "SQL";
         DependencyKind[DependencyKind["Http"] = 1] = "Http";
-        DependencyKind[DependencyKind["Other"] = 2] = "Other";
+        DependencyKind[DependencyKind["Other"] = 1] = "Other";
     })(AI.DependencyKind || (AI.DependencyKind = {}));
     var DependencyKind = AI.DependencyKind;
 })(AI || (AI = {}));
@@ -2948,7 +2948,7 @@ var AI;
     (function (DependencySourceType) {
         DependencySourceType[DependencySourceType["Undefined"] = 0] = "Undefined";
         DependencySourceType[DependencySourceType["Aic"] = 1] = "Aic";
-        DependencySourceType[DependencySourceType["Apmc"] = 2] = "Apmc";
+        DependencySourceType[DependencySourceType["Apmc"] = 1] = "Apmc";
     })(AI.DependencySourceType || (AI.DependencySourceType = {}));
     var DependencySourceType = AI.DependencySourceType;
 })(AI || (AI = {}));
@@ -2962,7 +2962,7 @@ var AI;
     var RemoteDependencyData = (function (_super) {
         __extends(RemoteDependencyData, _super);
         function RemoteDependencyData() {
-            this.ver = 2;
+            this.ver = 1;
             this.kind = AI.DataPointType.Aggregation;
             this.dependencyKind = AI.DependencyKind.Other;
             this.success = true;
@@ -3320,7 +3320,7 @@ var AI;
     var AjaxCallData = (function (_super) {
         __extends(AjaxCallData, _super);
         function AjaxCallData() {
-            this.ver = 2;
+            this.ver = 1;
             this.properties = {};
             this.measurements = {};
             _super.call(this);
@@ -3336,7 +3336,7 @@ var AI;
     var RequestData = (function (_super) {
         __extends(RequestData, _super);
         function RequestData() {
-            this.ver = 2;
+            this.ver = 1;
             this.properties = {};
             this.measurements = {};
             _super.call(this);
@@ -3353,7 +3353,7 @@ var AI;
     var SessionStateData = (function (_super) {
         __extends(SessionStateData, _super);
         function SessionStateData() {
-            this.ver = 2;
+            this.ver = 1;
             this.state = AI.SessionState.Start;
             _super.call(this);
         }
@@ -3378,7 +3378,7 @@ var Microsoft;
                         config.instrumentationKey = config["iKey"];
                     }
                     else if (config["applicationInsightsId"]) {
-                        Microsoft.ApplicationInsights.Version = "0.7.2.0";
+                        Microsoft.ApplicationInsights.Version = "0.7.1.0";
                         config.instrumentationKey = config["applicationInsightsId"];
                     }
                     else {

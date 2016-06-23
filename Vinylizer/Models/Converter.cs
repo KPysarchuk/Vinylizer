@@ -7,39 +7,35 @@ namespace Vinylizer.Models
 {
     public class Converter
     {
-        public static void Merge(string fileName)
+        public static void Merge(string mergeString, string fileName, int usedFilters)
         {
-            Random rnd = new Random();
-            string input = string.Format("Vinylizer/{0}/{1}", fileName, fileName);
-            string filter = string.Format("Vinylizer/{0}/filter.mp3", fileName); ;
-            string UfileName = string.Format("Converted{0}", fileName);
-            string output = string.Format("Vinylizer/{0}/", UfileName);
-            string command = string.Format("-i {0} -i {1} -filter_complex amix=inputs=2:duration=first:dropout_transition=2 {2}", input, filter, output);
+            string output = string.Format("Converted{0}/", fileName);
+            string command = string.Format("{0} -filter_complex amix=inputs={1}:duration=first:dropout_transition=2 {2}", mergeString, usedFilters, fileName);
             var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
             ffMpeg.Invoke(command);
         }
 
-        public static void ChangeVolume(int volumePart, string fileName)
+        public static string ChangeVolume(int volumePart, string filterName)
         {
             Random rnd = new Random();
-            string filter = "filter.mp3";
-            string output = string.Format("Vinylizer/{0}/filter.mp3", fileName);
-            string command = string.Format(@"-i {0} -af ""volume={1}"" {2}", filter, volumePart, output).Replace("\"", string.Empty);
+            string output = string.Format("filter{0}.mp3", rnd.Next(1000000000));
+            string command = string.Format(@"-i {0} -af ""volume={1}"" {2}", filterName, volumePart, output).Replace("\"", string.Empty);
             var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
             ffMpeg.Invoke(command);
+
+            return output;
         }
 
-        public static string ChangeVolumeForTest(int volumePart, string fileName)
+        public static string Loop(int filterId, TimeSpan duration)
         {
             Random rnd = new Random();
-            string filter = "D:/filter.mp3";
-            string outputName = string.Format("filter{0}.mp3", rnd.Next(1000000).ToString());
-            string output = string.Format("D:/Vinylizer/{0}/Test/{1}", fileName, outputName);
-            string command = string.Format(@"-i {0} -af ""volume={1}"" {2}", filter, volumePart, output).Replace("\"", string.Empty);
+            string file = string.Format("loop{0}.txt", filterId.ToString());
+            string output = string.Format("filter{0}.mp3", rnd.Next(1000000000));
+            string command = string.Format("- t {0} - f concat - i {1} - c copy - t {0} {2}", duration.TotalSeconds.ToString(), file, output);
             var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
             ffMpeg.Invoke(command);
 
-            return outputName;
+            return output;
         }
     }
 }
